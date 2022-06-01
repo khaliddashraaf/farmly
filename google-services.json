@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "550219622725",
+    "firebase_url": "https://farmly-c97b1-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "farmly-c97b1",
+    "storage_bucket": "farmly-c97b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550219622725:android:cd74297b3b0bb5a246b62c",
+        "android_client_info": {
+          "package_name": "com.reactnativefirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "550219622725-9636vke194io43n6sdu6eqtfvpd4k274.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh5Yf1LqK2nerZYxfJw7KqJp0os_PsNgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "550219622725-9636vke194io43n6sdu6eqtfvpd4k274.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "550219622725-31fpb58rr3f9qi8srse8m8gjigpm0ku0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.reactnativefirebase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
