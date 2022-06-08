@@ -2,6 +2,8 @@ node_modules/
 .expo/
 dist/
 .expo-shared/
+.vscode
+src/firebase/*
 npm-debug.*
 *.jks
 *.p8
@@ -10,6 +12,8 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+google-services.json
+GoogleService-info.plist
 
 # macOS
 .DS_Store

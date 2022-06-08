@@ -1,120 +1,78 @@
-import React, { useEffect, useState } from 'react'
-import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import styles from './styles';
-import { firebase } from '../../firebase/config'
-import { getDatabase, ref, child, get } from "firebase/database";
-import CircularProgress from 'react-native-circular-progress-indicator';
-
+import React, { useEffect, useState } from "react";
+import { Text, View, ImageBackground } from "react-native";
+import styles from "./styles";
+import { firebase } from "../../firebase/config";
+import ProgressCircle from "../../components/ProgressCricle";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 export default function HomeScreen(props) {
+  const [loading, setLoading] = useState(true);
+  const [sensorData, setSensorData] = useState({});
 
-    const [entityText, setEntityText] = useState('');
-    const [entities, setEntities] = useState([]);
-    const [realTimeData, setRealTimeData] = useState({});
+  const realtime = firebase.database().ref();
 
-    const entityRef = firebase.firestore().collection('entities')
-    const real = firebase.database()
-    const userID = props.extraData.id
+  useEffect(() => {
+    setLoading(true);
 
+    realtime.once("value", (snap) => {
+      setSensorData(snap.val());
+      setLoading(false);
+    });
+  }, []);
 
-    useEffect(() => {
-        real
-            .ref()
-            .once('value')
-            .then(snapshot => {
-                setRealTimeData(snapshot.val());
-            })
-            .catch(error => {
-                console.log(error);
-            })
-        if(realTimeData)
-            // console.log(realTimeData)
-        entityRef
-            .where("authorID", "==", userID)
-            .orderBy('createdAt', 'desc')
-            .onSnapshot(
-                querySnapshot => {
-                    const newEntities = []
-                    querySnapshot.forEach(doc => {
-                        const entity = doc.data()
-                        entity.id = doc.id
-                        newEntities.push(entity)
-                    });
-                    setEntities(newEntities)
-                },
-                error => {
-                    console.log(error)
-                }
-            )
-    }, [])
-
-    const onClick = () => {
-        props.navigation.navigate('PlantScreen')
-    }
-
-    const renderEntity = ({item, index}) => {
-        return (
-            <View style={styles.entityContainer}>
-                <Text style={styles.entityText}>
-                    {index}. {item.text}
-                </Text>
+  return (
+    !loading && (
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("../../../assets/background.png")}
+          resizeMode="cover"
+          style={{ width: "100%", height: "100%" }}
+        >
+          {sensorData && (
+            <View style={styles.listContainer}>
+              <View style={styles.listItem}>
+                <ProgressCircle
+                  style={styles.circular}
+                  value={sensorData["Temp"] / 100}
+                  size={120}
+                  thickness={9}
+                  color="#A6BF8E"
+                  unfilledColor="#f2f2f2"
+                  animationMethod="spring"
+                  animationConfig={{ speed: 1 }}
+                >
+                  <View style={styles.textContainer}>
+                    <Text style={styles.circularText}>
+                      {sensorData["Temp"]}
+                    </Text>
+                    <Icon name="temperature-celsius" size={25} />
+                  </View>
+                </ProgressCircle>
+                <Text style={{}}>Temperature</Text>
+              </View>
+              <View style={styles.listItem}>
+                <ProgressCircle
+                  style={styles.circular}
+                  value={sensorData["Humid"] / 100}
+                  size={120}
+                  thickness={9}
+                  color="#A6BF8E"
+                  unfilledColor="#f2f2f2"
+                  animationMethod="spring"
+                  animationConfig={{ speed: 1 }}
+                >
+                  <View style={styles.textContainer}>
+                    <Text style={styles.circularText}>
+                      {sensorData["Humid"]}
+                    </Text>
+                    <Icon name="water-percent" size={30} />
+                  </View>
+                </ProgressCircle>
+                <Text style={{}}>Humidity</Text>
+              </View>
             </View>
-        )
-    }
-
-    return (
-        <View style={styles.container}>
-            
-            { realTimeData && (
-                <View style={styles.listContainer}>
-                    <View style={styles.circular}>
-                        <CircularProgress
-                            value={(realTimeData["Humidity"])}
-                            radius={80}
-                            duration={500}
-                            progressValueColor={'black'}
-                            maxValue={100}
-                            title={'Humidity'}
-                            titleColor={'black'}
-                            titleStyle={{fontWeight: '100'}}
-                            progressValueStyle={{fontWeight:'100'}}
-                        />
-                    </View>
-                    <View style={styles.circular}>
-
-                        <CircularProgress
-                            value={realTimeData["Temperature"]}
-                            radius={80}
-                            duration={500}
-                            progressValueColor={'black'}
-                            maxValue={100}
-                            title={'Temperature'}
-                            titleColor={'black'}
-                            titleStyle={{fontSize:15,fontWeight: '100'}}
-                            valueSuffix={'˚'}
-                            progressValueStyle={{fontWeight:'100'}}
-                        />
-                    </View>
-                    <View style={styles.circular}>
-                        <CircularProgress
-                            value={realTimeData["Soil Moisture"]}
-                            radius={80}
-                            duration={500}
-                            progressValueColor={'black'}
-                            maxValue={100}
-                            title={'Soil Moisture'}
-                            valueSuffix={"%"}
-                            titleColor={'black'}
-                            titleStyle={{fontSize:15,fontWeight: '100'}}
-                            progressValueStyle={{fontWeight:'100'}}
-                        />
-                    </View>
-                </View>
-            )}
-            <View style={styles.button}>
-                <TouchableOpacity onPress={onClick}>
-                    <Text style={styles.buttonText}>View Plant Status</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+          )}
+        </ImageBackground>
+      </View>
     )
+  );
 }

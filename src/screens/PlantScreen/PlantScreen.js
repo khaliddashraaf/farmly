@@ -3,8 +3,10 @@ import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from 'rea
 import styles from './styles';
 import { firebase } from '../../firebase/config'
 
-export default function PlantScreen(props) {
 
+export default function PlantScreen(props) {
+    const [imageLink,setImageLink] = useState("..")
+    const [plantDisease, setPlantDisease] = useState('');
     return(
         <View>
             <TouchableOpacity onPress={() => props.navigation.navigate('HomeScreen')}>

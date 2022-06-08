@@ -1,59 +1,49 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center'
-    },
-    formContainer: {
-        flexDirection: 'row',
-        height: 80,
-        marginTop: 40,
-        marginBottom: 20,
-        flex: 1,
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 30,
-        paddingRight: 30,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    input: {
-        height: 48,
-        borderRadius: 5,
-        overflow: 'hidden',
-        backgroundColor: 'white',
-        paddingLeft: 16,
-        flex: 1,
-        marginRight: 5
-    },
-    button: {
-        height: 47,
-        borderRadius: 15,
-        backgroundColor: '#788eec',
-        width: 150,
-        alignItems: "center",
-        justifyContent: 'center'
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16
-    },
-    listContainer: {
-        marginTop: 20,
-        padding: 20,
-    },
-    circular: {
-        marginBottom:20
-    },
-    entityContainer: {
-        marginTop: 16,
-        borderBottomColor: '#cccccc',
-        borderBottomWidth: 1,
-        paddingBottom: 16
-    },
-    entityText: {
-        fontSize: 20,
-        color: '#333333'
-    }
-})
+  container: {
+    flex: 1,
+    alignItems: "center",
+  },
+  button: {
+    height: 47,
+    borderRadius: 15,
+    backgroundColor: "#619C0B",
+    width: 150,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  listContainer: {
+    margin: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    flex: 1,
+    borderRadius: 20,
+    flexDirection: "row",
+    backgroundColor: "#ffffff",
+    maxHeight: 200,
+  },
+  listItem: {
+    flex: 1,
+    height: 30,
+    alignItems: "center",
+  },
+  circular: {
+    marginBottom: 20,
+  },
+  textContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  circularText: {
+    fontSize: 25,
+    fontWeight: "700",
+  },
+});

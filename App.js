@@ -1,65 +1,65 @@
-import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import { LoginScreen, HomeScreen, RegistrationScreen, PlantScreen } from './src/screens'
-import {decode, encode} from 'base-64'
-if (!global.btoa) {  global.btoa = encode }
-if (!global.atob) { global.atob = decode }
+import "react-native-gesture-handler";
+import React, { useEffect, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { HomeScreen, PlantScreen, IrrigationScreen } from "./src/screens";
+import DrawerItems from "./src/components/DrawerItems";
+import { decode, encode } from "base-64";
+import { firebase } from "./src/firebase/config";
+import { LogBox } from "react-native";
 
-import { firebase } from './src/firebase/config'
+LogBox.ignoreLogs(["Setting a timer"]);
 
-const Stack = createStackNavigator();
+if (!global.btoa) {
+  global.btoa = encode;
+}
+if (!global.atob) {
+  global.atob = decode;
+}
+
+const Drawer = createDrawerNavigator();
 
 export default function App() {
-
-  const [loading, setLoading] = useState(false)
-  const [user, setUser] = useState(null)
-
-  if (loading) {	
-    return (	
-      <></>	
-    )	
-  }
-
+  const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const usersRef = firebase.firestore().collection('users');
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        usersRef
-          .doc(user.uid)
-          .get()
-          .then((document) => {
-            const userData = document.data()
-            setLoading(false)
-            setUser(userData)
-          })
-          .catch((error) => {
-            setLoading(false)
-          });
-      } else {
-        setLoading(false)
-      }
+    const realtime = firebase.database();
+
+    setLoading(true);
+
+    realtime.ref().once("value", (snap) => {
+      setData(snap.val());
+      setLoading(false);
     });
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        { user ? (
-          <>
-          <Stack.Screen name="HomeScreen">
-            {props => <HomeScreen {...props} extraData={user} />}
-          </Stack.Screen>
-          <Stack.Screen name="PlantScreen" component={PlantScreen}/>
-</>
-        ) : (
-          <>
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
-            <Stack.Screen name="RegistrationScreen" component={RegistrationScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    !loading && (
+      <NavigationContainer>
+        <Drawer.Navigator
+          drawerType="front"
+          initialRouteName="Sensor Data"
+          screenOptions={{
+            drawerActiveTintColor: "black",
+            drawerActiveBackgroundColor: "#D4D9B0",
+            itemStyle: { marginVertical: 10 },
+          }}
+        >
+          {DrawerItems.map((drawer) => (
+            <Drawer.Screen
+              key={drawer.name}
+              name={drawer.name}
+              component={
+                drawer.name === "Irrigation System Control"
+                  ? IrrigationScreen
+                  : drawer.name === "Plant Disease Detection"
+                  ? PlantScreen
+                  : HomeScreen
+              }
+            />
+          ))}
+        </Drawer.Navigator>
+      </NavigationContainer>
+    )
   );
 }
